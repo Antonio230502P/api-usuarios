@@ -9,5 +9,5 @@ public interface UserService {
     List<UserResponse> getAll();
     UserResponse getByUuid(String id);
     UserResponse createUser(UserRequest userRequest);
-    String deleteUser(String uuid);
+    UserResponse deleteUser(String uuid);
 }

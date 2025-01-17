@@ -56,14 +56,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String deleteUser(String uuid) {
-        // userRepository.deleteByUuid(UUID.fromString(uuid)); No funciona con el repositorio
-        try{
-            User userToDelete = userRepository.findByUuid(UUID.fromString(uuid));
-            userRepository.delete(userToDelete);
-            return "User deleted succesfully";
-        }catch(Exception e){
-            return "There are not any user with these UUID";
-        }
+    public UserResponse deleteUser(String uuid) {
+        // userRepository.deleteByUuid(UUID.fromString(uuid)); No funciona con el
+        // repositorio
+        User userToDelete = userRepository.findByUuid(UUID.fromString(uuid));
+        userRepository.delete(userToDelete);
+        return userMapper.entityToResponse(userToDelete);
     }
 }
