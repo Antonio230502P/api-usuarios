@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UserService {
     List<UserResponse> getAll();
-    UserResponse getByUUID(String id);
+    UserResponse getByUuid(String id);
     UserResponse createUser(UserRequest userRequest);
+    String deleteUser(String uuid);
 }

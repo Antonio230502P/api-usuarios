@@ -39,7 +39,7 @@ public class User {
     private Timestamp updatedDate;
 
     @Column(name = "uuid")
-    private UUID UUID;
+    private UUID uuid;
 
     @Column(name = "planet")
     private String planet;

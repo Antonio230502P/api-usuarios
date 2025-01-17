@@ -21,7 +21,7 @@ public class UserMapperImpl implements UserMapper {
         userResponse.setEmail(user.getEmail());
         userResponse.setCreatedDate(user.getCreatedDate());
         userResponse.setUpdatedDate(user.getUpdatedDate());
-        userResponse.setUuid(user.getUUID());
+        userResponse.setUuid(user.getUuid());
 
         LocalDate birthdate = user.getBirthdate();
         LocalDate currentDate = LocalDate.now();

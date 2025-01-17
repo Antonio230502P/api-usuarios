@@ -29,12 +29,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponse> getAll() {
-        return userMapper.entityToResponseList(userRepository .findAll());
+        return userMapper.entityToResponseList(userRepository.findAll());
     }
 
     @Override
-    public UserResponse getByUUID(String uuid) {
-        return userMapper.entityToResponse(userRepository.findByUUID(UUID.fromString(uuid)));
+    public UserResponse getByUuid(String uuid) {
+        return userMapper.entityToResponse(userRepository.findByUuid(UUID.fromString(uuid)));
     }
 
     @Override
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         User newUser = userMapper.requestToEntity(userRequest);
 
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
-        newUser.setUUID(UUID.randomUUID());
+        newUser.setUuid(UUID.randomUUID());
         newUser.setCreatedDate(currentTimeStamp);
         newUser.setUpdatedDate(currentTimeStamp);
 
@@ -53,5 +53,17 @@ public class UserServiceImpl implements UserService {
         newUser.setPlanet(randomPlanet.getResult().getProperties().getName());
 
         return userMapper.entityToResponse(userRepository.save(newUser));
+    }
+
+    @Override
+    public String deleteUser(String uuid) {
+        // userRepository.deleteByUuid(UUID.fromString(uuid)); No funciona con el repositorio
+        try{
+            User userToDelete = userRepository.findByUuid(UUID.fromString(uuid));
+            userRepository.delete(userToDelete);
+            return "User deleted succesfully";
+        }catch(Exception e){
+            return "There are not any user with these UUID";
+        }
     }
 }
