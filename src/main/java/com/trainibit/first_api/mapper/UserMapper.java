@@ -1,7 +1,7 @@
 package com.trainibit.first_api.mapper;
 
 import com.trainibit.first_api.entity.User;
-import com.trainibit.first_api.request.UserRequest;
+import com.trainibit.first_api.request.UserRequestPost;
 import com.trainibit.first_api.response.UserResponse;
 
 import java.util.List;
@@ -9,5 +9,5 @@ import java.util.List;
 public interface UserMapper {
     UserResponse entityToResponse(User user);
     List<UserResponse> entityToResponseList(List<User> userList);
-    User requestToEntity(UserRequest userRequest);
+    User requestToEntity(UserRequestPost userRequest);
 }

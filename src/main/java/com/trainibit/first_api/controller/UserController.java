@@ -1,6 +1,7 @@
 package com.trainibit.first_api.controller;
 
-import com.trainibit.first_api.request.UserRequest;
+import com.trainibit.first_api.request.UserRequestPost;
+import com.trainibit.first_api.request.UserRequestPut;
 import com.trainibit.first_api.response.UserResponse;
 import com.trainibit.first_api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,18 +35,17 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponse createUser(@RequestBody UserRequest userRequest) {
-        return userService.createUser(userRequest);
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequestPost userRequest) {
+        return ResponseEntity.ok(userService.createUser(userRequest));
     }
 
     @DeleteMapping("/{uuid}")
-    public UserResponse deleteUser(@PathVariable String uuid){
-        return userService.deleteUser(uuid);
+    public ResponseEntity<UserResponse> deleteUser(@PathVariable String uuid){
+        return ResponseEntity.ok(userService.deleteUser(uuid));
     }
 
     @PutMapping("/{uuid}")
-    public UserResponse updateUser(@RequestBody UserRequest userRequest){
-        UserResponse userResponse = new UserResponse();
-        return  userResponse;
+    public ResponseEntity<UserResponse> updateUser(@PathVariable String uuid, @RequestBody UserRequestPut userRequest){
+        return ResponseEntity.ok(userService.updateUser(uuid, userRequest));
     }
 }

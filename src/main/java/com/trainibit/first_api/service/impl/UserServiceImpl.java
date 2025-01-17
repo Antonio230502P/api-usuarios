@@ -3,7 +3,8 @@ package com.trainibit.first_api.service.impl;
 import com.trainibit.first_api.entity.User;
 import com.trainibit.first_api.mapper.UserMapper;
 import com.trainibit.first_api.repository.UserRepository;
-import com.trainibit.first_api.request.UserRequest;
+import com.trainibit.first_api.request.UserRequestPost;
+import com.trainibit.first_api.request.UserRequestPut;
 import com.trainibit.first_api.response.UserResponse;
 import com.trainibit.first_api.response.external.PlanetResponse;
 import com.trainibit.first_api.service.PlanetService;
@@ -38,29 +39,46 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse createUser(UserRequest userRequest) {
+    public UserResponse createUser(UserRequestPost userRequest) {
         User newUser = userMapper.requestToEntity(userRequest);
 
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
         newUser.setUuid(UUID.randomUUID());
         newUser.setCreatedDate(currentTimeStamp);
         newUser.setUpdatedDate(currentTimeStamp);
-
-        Random random = new Random();
-        int randomNumber = random.nextInt(60) + 1;
-        PlanetResponse randomPlanet = planetService.getPlanetById(randomNumber);
-
-        newUser.setPlanet(randomPlanet.getResult().getProperties().getName());
+        newUser.setPlanet(obtainRandomPlanetName());
 
         return userMapper.entityToResponse(userRepository.save(newUser));
     }
 
     @Override
     public UserResponse deleteUser(String uuid) {
-        // userRepository.deleteByUuid(UUID.fromString(uuid)); No funciona con el
-        // repositorio
+        // userRepository.deleteByUuid(UUID.fromString(uuid)); No funciona con el repositorio
         User userToDelete = userRepository.findByUuid(UUID.fromString(uuid));
         userRepository.delete(userToDelete);
         return userMapper.entityToResponse(userToDelete);
+    }
+
+    @Override
+    public UserResponse updateUser(String uuid, UserRequestPut userRequest) {
+        User existentUser = userRepository.findByUuid(UUID.fromString(uuid));
+
+        existentUser.setFirstName(userRequest.getFirstName() != null ? userRequest.getFirstName() : existentUser.getFirstName());
+        existentUser.setLastName(userRequest.getLastName() != null ? userRequest.getLastName() : existentUser.getLastName());
+        existentUser.setEmail(userRequest.getEmail() != null ? userRequest.getEmail() : existentUser.getEmail());
+        existentUser.setBirthdate(userRequest.getBirthdate() != null ? userRequest.getBirthdate() : existentUser.getBirthdate());
+        existentUser.setPlanet(userRequest.getPlanet() != null ? userRequest.getPlanet() : existentUser.getPlanet());
+
+        Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
+        existentUser.setUpdatedDate(currentTimeStamp);
+
+        return userMapper.entityToResponse(userRepository.save(existentUser));
+    }
+
+    private String obtainRandomPlanetName(){
+        Random random = new Random();
+        int randomNumber = random.nextInt(60) + 1;
+        PlanetResponse randomPlanet = planetService.getPlanetById(randomNumber);
+        return randomPlanet.getResult().getProperties().getName();
     }
 }
