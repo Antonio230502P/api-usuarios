@@ -2,6 +2,7 @@ package com.trainibit.first_api.service.impl;
 
 import com.trainibit.first_api.entity.User;
 import com.trainibit.first_api.mapper.UserMapper;
+import com.trainibit.first_api.repository.FederalStateRepository;
 import com.trainibit.first_api.repository.UserRepository;
 import com.trainibit.first_api.request.UserRequestPost;
 import com.trainibit.first_api.request.UserRequestPut;
@@ -23,6 +24,9 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private FederalStateRepository federalStateRepository;
+
+    @Autowired
     private UserMapper userMapper;
 
     @Autowired
@@ -34,8 +38,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse getByUuid(String uuid) {
-        return userMapper.entityToResponse(userRepository.findByUuid(UUID.fromString(uuid)));
+    public UserResponse getByUuid(UUID uuid) {
+        return userMapper.entityToResponse(userRepository.findByUuid(uuid));
     }
 
     @Override
@@ -47,21 +51,24 @@ public class UserServiceImpl implements UserService {
         newUser.setCreatedDate(currentTimeStamp);
         newUser.setUpdatedDate(currentTimeStamp);
         newUser.setPlanet(obtainRandomPlanetName());
+        newUser.setFederalState(federalStateRepository.getFederalStateByUuid(userRequest.getFederalStateUuid()));
+
+
 
         return userMapper.entityToResponse(userRepository.save(newUser));
     }
 
     @Override
-    public UserResponse deleteUser(String uuid) {
+    public UserResponse deleteUser(UUID uuid) {
         // userRepository.deleteByUuid(UUID.fromString(uuid)); No funciona con el repositorio
-        User userToDelete = userRepository.findByUuid(UUID.fromString(uuid));
+        User userToDelete = userRepository.findByUuid(uuid);
         userRepository.delete(userToDelete);
         return userMapper.entityToResponse(userToDelete);
     }
 
     @Override
-    public UserResponse updateUser(String uuid, UserRequestPut userRequest) {
-        User existentUser = userRepository.findByUuid(UUID.fromString(uuid));
+    public UserResponse updateUser(UUID uuid, UserRequestPut userRequest) {
+        User existentUser = userRepository.findByUuid(uuid);
 
         existentUser.setFirstName(userRequest.getFirstName() != null ? userRequest.getFirstName() : existentUser.getFirstName());
         existentUser.setLastName(userRequest.getLastName() != null ? userRequest.getLastName() : existentUser.getLastName());

@@ -35,5 +35,4 @@ public class FederalState {
 
     @Column(name = "uuid", nullable = false)
     private UUID uuid;
-
 }

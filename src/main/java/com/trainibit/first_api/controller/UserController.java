@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
+
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping("/users")
@@ -30,22 +33,23 @@ public class UserController {
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable String uuid) {
-        return ResponseEntity.ok(userService.getByUuid(uuid));
+    public ResponseEntity<UserResponse> getUser(@PathVariable UUID uuid) {
+        return ResponseEntity.ok(userService.getByUuid(uuid)); // 200
     }
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequestPost userRequest) {
-        return ResponseEntity.ok(userService.createUser(userRequest));
+        return new ResponseEntity<>(userService.createUser(userRequest), CREATED); //201 Creado
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<UserResponse> deleteUser(@PathVariable String uuid){
-        return ResponseEntity.ok(userService.deleteUser(uuid));
+    public ResponseEntity<UserResponse> deleteUser(@PathVariable UUID uuid){
+        return ResponseEntity.status(204).body(userService.deleteUser(uuid)); //204 Solicitud exitosa pero sin contenido que retornar
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable String uuid, @RequestBody UserRequestPut userRequest){
-        return ResponseEntity.ok(userService.updateUser(uuid, userRequest));
+    public ResponseEntity<UserResponse> updateUser(@PathVariable UUID uuid, @RequestBody UserRequestPut userRequest){
+        return ResponseEntity.ok(userService.updateUser(uuid, userRequest)); // Para la actualización de contenido puede retornarse un código 200 o un 400 sin retornar contenido
     }
+
 }

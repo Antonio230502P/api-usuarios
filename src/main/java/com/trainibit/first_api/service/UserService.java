@@ -5,11 +5,12 @@ import com.trainibit.first_api.request.UserRequestPut;
 import com.trainibit.first_api.response.UserResponse;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserService {
     List<UserResponse> getAll();
-    UserResponse getByUuid(String id);
+    UserResponse getByUuid(UUID id);
     UserResponse createUser(UserRequestPost userRequestPost);
-    UserResponse deleteUser(String uuid);
-    UserResponse updateUser(String uuid, UserRequestPut userRequestPost);
+    UserResponse deleteUser(UUID uuid);
+    UserResponse updateUser(UUID uuid, UserRequestPut userRequestPost);
 }
