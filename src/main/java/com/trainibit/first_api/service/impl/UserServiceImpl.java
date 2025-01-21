@@ -1,9 +1,12 @@
 package com.trainibit.first_api.service.impl;
 
+import com.trainibit.first_api.entity.RolesByUser;
 import com.trainibit.first_api.entity.User;
 import com.trainibit.first_api.mapper.UserMapper;
 import com.trainibit.first_api.repository.FederalStateRepository;
+import com.trainibit.first_api.repository.RoleRepository;
 import com.trainibit.first_api.repository.UserRepository;
+import com.trainibit.first_api.request.RoleUserRequest;
 import com.trainibit.first_api.request.UserRequestPost;
 import com.trainibit.first_api.request.UserRequestPut;
 import com.trainibit.first_api.response.UserResponse;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -25,6 +29,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private FederalStateRepository federalStateRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private UserMapper userMapper;
@@ -53,7 +60,19 @@ public class UserServiceImpl implements UserService {
         newUser.setPlanet(obtainRandomPlanetName());
         newUser.setFederalState(federalStateRepository.getFederalStateByUuid(userRequest.getFederalStateUuid()));
 
+        List<RolesByUser> roles = new ArrayList<>();
 
+        for(RoleUserRequest role : userRequest.getRoles()){
+            RolesByUser roleByUserTemporary = new RolesByUser();
+            roleByUserTemporary.setUser(newUser);
+            roleByUserTemporary.setRole(roleRepository.getRoleByUuid(role.getRolUuid())); 
+            roleByUserTemporary.setCreatedDate(currentTimeStamp); 
+            roleByUserTemporary.setUpdatedDate(currentTimeStamp);
+            roleByUserTemporary.setUuid(UUID.randomUUID());
+            roles.add(roleByUserTemporary);
+        }
+
+        newUser.setRoles(roles);
 
         return userMapper.entityToResponse(userRepository.save(newUser));
     }

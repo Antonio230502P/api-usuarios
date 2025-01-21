@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Getter
@@ -14,12 +15,14 @@ public class UserRequestPost {
     private String email;
     private LocalDate birthdate;
     private UUID federalStateUuid;
+    private ArrayList<RoleUserRequest> roles;
 
-    public UserRequestPost(String firstName, String lastName, String email, LocalDate birthdate, UUID federalStateUuid) {
+    public UserRequestPost(String firstName, String lastName, String email, LocalDate birthdate, UUID federalStateUuid, ArrayList<RoleUserRequest> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.birthdate = birthdate;
         this.federalStateUuid = federalStateUuid;
+        this.roles = roles;
     }
 }

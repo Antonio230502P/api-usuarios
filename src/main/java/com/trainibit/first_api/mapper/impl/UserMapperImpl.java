@@ -2,10 +2,8 @@ package com.trainibit.first_api.mapper.impl;
 
 import com.trainibit.first_api.entity.User;
 import com.trainibit.first_api.mapper.UserMapper;
-import com.trainibit.first_api.repository.FederalStateRepository;
 import com.trainibit.first_api.request.UserRequestPost;
 import com.trainibit.first_api.response.UserResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
