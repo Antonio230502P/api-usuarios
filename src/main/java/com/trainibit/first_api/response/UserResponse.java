@@ -1,17 +1,13 @@
 package com.trainibit.first_api.response;
 
-import com.trainibit.first_api.entity.FederalState;
-import com.trainibit.first_api.entity.RolesByUser;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 public class UserResponse {
 
     private String firstName;

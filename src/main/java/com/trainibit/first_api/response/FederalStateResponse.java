@@ -1,6 +1,7 @@
 package com.trainibit.first_api.response;
 
 import lombok.Data;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 

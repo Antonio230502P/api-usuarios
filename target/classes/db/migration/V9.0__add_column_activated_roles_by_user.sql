@@ -1,0 +1,1 @@
+ALTER TABLE public.roles_by_users ADD activated boolean DEFAULT false NOT NULL;

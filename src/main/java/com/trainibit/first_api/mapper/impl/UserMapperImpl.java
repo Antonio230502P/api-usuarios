@@ -2,7 +2,6 @@ package com.trainibit.first_api.mapper.impl;
 
 import com.trainibit.first_api.entity.User;
 import com.trainibit.first_api.mapper.FederalStateMapper;
-import com.trainibit.first_api.mapper.RoleMapper;
 import com.trainibit.first_api.mapper.RolesByUserMapper;
 import com.trainibit.first_api.mapper.UserMapper;
 import com.trainibit.first_api.request.UserRequestPost;

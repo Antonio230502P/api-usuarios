@@ -1,10 +1,8 @@
 package com.trainibit.first_api.response.external;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class PlanetResponse {
     private String message;
     private ResultPlanetResponse result;

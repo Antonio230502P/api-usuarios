@@ -10,16 +10,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.sql.Timestamp;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "roles_by_users")
 public class RolesByUser {
@@ -47,4 +44,7 @@ public class RolesByUser {
 
     @Column(name = "uuid", nullable = false)
     private UUID uuid;
+
+    @Column(name = "activated", nullable = false)
+    private boolean activated;
 }

@@ -1,10 +1,8 @@
 package com.trainibit.first_api.response.external;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class PropertiesResultPlanetResponse {
     private String diameter;
     private String rotation_period;

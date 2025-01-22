@@ -1,8 +1,8 @@
 package com.trainibit.first_api.request;
 
-import java.util.UUID;
-
 import lombok.Data;
+
+import java.util.UUID;
 
 @Data
 public class RoleUserRequest {
