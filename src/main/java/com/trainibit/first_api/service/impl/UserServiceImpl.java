@@ -79,7 +79,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse deleteUser(UUID uuid) {
-        // userRepository.deleteByUuid(UUID.fromString(uuid)); No funciona con el repositorio
         User userToDelete = userRepository.findByUuid(uuid);
         userRepository.delete(userToDelete);
         return userMapper.entityToResponse(userToDelete);
