@@ -1,9 +1,13 @@
 package com.trainibit.first_api.mapper.impl;
 
 import com.trainibit.first_api.entity.User;
+import com.trainibit.first_api.mapper.FederalStateMapper;
+import com.trainibit.first_api.mapper.RoleMapper;
+import com.trainibit.first_api.mapper.RolesByUserMapper;
 import com.trainibit.first_api.mapper.UserMapper;
 import com.trainibit.first_api.request.UserRequestPost;
 import com.trainibit.first_api.response.UserResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,6 +17,12 @@ import java.util.List;
 
 @Service
 public class UserMapperImpl implements UserMapper {
+    @Autowired
+    private FederalStateMapper federalStateMapper;
+
+    @Autowired
+    private RolesByUserMapper rolesByUserMapper;
+
     @Override
     public UserResponse entityToResponse(User user) {
         UserResponse userResponse = new UserResponse();
@@ -22,8 +32,8 @@ public class UserMapperImpl implements UserMapper {
         userResponse.setCreatedDate(user.getCreatedDate());
         userResponse.setUpdatedDate(user.getUpdatedDate());
         userResponse.setUuid(user.getUuid());
-        userResponse.setFederalState(user.getFederalState());
-        userResponse.setRoles(user.getRoles());
+        userResponse.setFederalState(federalStateMapper.entityToResponse(user.getFederalState()));
+        userResponse.setRoles(rolesByUserMapper.entityToResponseList(user.getRoles()));
 
         LocalDate birthdate = user.getBirthdate();
         LocalDate currentDate = LocalDate.now();

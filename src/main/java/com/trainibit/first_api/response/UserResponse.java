@@ -23,6 +23,6 @@ public class UserResponse {
     private Timestamp updatedDate;
     private String age;
     private String planet;
-    private FederalState federalState;
-    private List<RolesByUser> roles;
+    private FederalStateResponse federalState;
+    private List<RolesByUserResponse> roles;
 }

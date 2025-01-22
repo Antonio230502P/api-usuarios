@@ -1,5 +1,6 @@
 package com.trainibit.first_api.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,6 +56,7 @@ public class User {
     @JoinColumn(name = "federal_state_id", nullable = false)
     private FederalState federalState;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<RolesByUser> roles = new ArrayList<>();
 }
