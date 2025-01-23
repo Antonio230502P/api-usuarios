@@ -4,6 +4,7 @@ import com.trainibit.first_api.request.UserRequestPost;
 import com.trainibit.first_api.request.UserRequestPut;
 import com.trainibit.first_api.response.UserResponse;
 import com.trainibit.first_api.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequestPost userRequest) {
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequestPost userRequest) {
         return new ResponseEntity<>(userService.createUser(userRequest), CREATED); //201 Creado
     }
 

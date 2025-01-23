@@ -6,6 +6,7 @@ import com.trainibit.first_api.entity.User;
 import com.trainibit.first_api.mapper.UserMapper;
 import com.trainibit.first_api.repository.FederalStateRepository;
 import com.trainibit.first_api.repository.UserRepository;
+import com.trainibit.first_api.request.RoleUserRequestPost;
 import com.trainibit.first_api.request.UserRequestPost;
 import com.trainibit.first_api.request.UserRequestPut;
 import com.trainibit.first_api.response.UserResponse;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,21 +62,19 @@ public class UserServiceImpl implements UserService {
         newUser.setCreatedDate(currentTimeStamp);
         newUser.setUpdatedDate(currentTimeStamp);
         newUser.setPlanet(obtainRandomPlanetName());
-        newUser.setFederalState(federalStateRepository.getFederalStateByUuid(userRequest.getFederalStateUuid()));
+        newUser.setFederalState(federalStateRepository.getFederalStateByUuid(UUID.fromString(userRequest.getFederalStateUuid())));
 
         List<Role> rolesTemplate = roleService.getAllRoles(); // Roles generales de la base de datos
         List<RolesByUser> roles = new ArrayList<>(); // Roles que tendrá el usuario
         List<UUID> rolesUuidsList = userRequest.getRoles()
                 .stream()
-                .map(roleUser -> roleUser.getRoleUuid())
-                .collect(Collectors.toList()); // UUIDs de los roles pasados por JSON
+                .map(rolesRequests -> UUID.fromString(rolesRequests.getRoleUuid()))
+                .toList(); // UUIDs de los roles pasados por JSON
 
         rolesTemplate.forEach(role -> {
             RolesByUser rolesByUserTemporary = new RolesByUser();
             rolesByUserTemporary.setUser(newUser);
             rolesByUserTemporary.setRole(role);
-            rolesByUserTemporary.setCreatedDate(currentTimeStamp);
-            rolesByUserTemporary.setUpdatedDate(currentTimeStamp);
             rolesByUserTemporary.setUuid(UUID.randomUUID());
             rolesByUserTemporary.setActivated(rolesUuidsList.contains(role.getUuid()));
 
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
                 userRequest.getLastName() != null ? userRequest.getLastName() : existentUser.getLastName());
         existentUser.setEmail(userRequest.getEmail() != null ? userRequest.getEmail() : existentUser.getEmail());
         existentUser.setBirthdate(
-                userRequest.getBirthdate() != null ? userRequest.getBirthdate() : existentUser.getBirthdate());
+                userRequest.getBirthdate() != null ? LocalDate.parse(userRequest.getBirthdate()) : existentUser.getBirthdate());
         existentUser.setPlanet(userRequest.getPlanet() != null ? userRequest.getPlanet() : existentUser.getPlanet());
 
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
@@ -111,12 +111,12 @@ public class UserServiceImpl implements UserService {
 
         existentUser.setFederalState(
                 userRequest.getFederalStateUuid() != null
-                        ? federalStateRepository.getFederalStateByUuid(userRequest.getFederalStateUuid())
+                        ? federalStateRepository.getFederalStateByUuid(UUID.fromString(userRequest.getFederalStateUuid()))
                         : existentUser.getFederalState());
 
         HashMap<UUID, Boolean> rolesUpdated = new HashMap<>();
         userRequest.getRoles()
-                .forEach(roleUpdated -> rolesUpdated.put(roleUpdated.getRoleUuid(), roleUpdated.getActivated()));
+                .forEach(roleUpdated -> rolesUpdated.put(UUID.fromString(roleUpdated.getRoleUuid()), roleUpdated.getActivated()));
 
         existentUser.getRoles().forEach(roleByUserExistentUser -> roleByUserExistentUser.setActivated(
                 rolesUpdated.containsKey(roleByUserExistentUser.getRole().getUuid()) // ¿Se modificó el rol?

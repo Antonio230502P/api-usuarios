@@ -62,7 +62,7 @@ public class UserMapperImpl implements UserMapper {
         user.setFirstName(userRequest.getFirstName());
         user.setLastName(userRequest.getLastName());
         user.setEmail(userRequest.getEmail());
-        user.setBirthdate(userRequest.getBirthdate());
+        user.setBirthdate(LocalDate.parse(userRequest.getBirthdate()));
 
         return user;
     }
