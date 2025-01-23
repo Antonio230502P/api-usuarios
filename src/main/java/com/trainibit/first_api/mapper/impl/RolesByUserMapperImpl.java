@@ -24,6 +24,7 @@ public class RolesByUserMapperImpl implements RolesByUserMapper {
         rolesByUserResponse.setCreatedDate(rolesByUser.getCreatedDate());
         rolesByUserResponse.setUpdatedDate(rolesByUser.getUpdatedDate());
         rolesByUserResponse.setUuid(rolesByUser.getUuid());
+        rolesByUserResponse.setActivated(rolesByUser.getActivated());
 
         return rolesByUserResponse;
     }

@@ -46,5 +46,5 @@ public class RolesByUser {
     private UUID uuid;
 
     @Column(name = "activated", nullable = false)
-    private boolean activated;
+    private Boolean activated;
 }

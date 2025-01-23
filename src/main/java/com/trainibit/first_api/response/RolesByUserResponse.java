@@ -16,4 +16,5 @@ public class RolesByUserResponse {
     private Timestamp createdDate;
     private Timestamp updatedDate;
     private UUID uuid;
+    private Boolean activated;
 }

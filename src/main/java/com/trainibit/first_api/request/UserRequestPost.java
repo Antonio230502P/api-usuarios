@@ -1,14 +1,12 @@
 package com.trainibit.first_api.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 public class UserRequestPost {
     private String firstName;
     private String lastName;

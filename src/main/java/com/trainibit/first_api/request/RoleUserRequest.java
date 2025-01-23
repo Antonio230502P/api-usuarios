@@ -6,5 +6,5 @@ import java.util.UUID;
 
 @Data
 public class RoleUserRequest {
-    private UUID rolUuid;  
+    private UUID roleUuid;  
 }

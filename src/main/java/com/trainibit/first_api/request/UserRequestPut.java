@@ -1,12 +1,10 @@
 package com.trainibit.first_api.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 public class UserRequestPut {
     private String firstName;
     private String lastName;

@@ -1,17 +1,17 @@
 package com.trainibit.first_api.service.impl;
 
+import com.trainibit.first_api.entity.Role;
 import com.trainibit.first_api.entity.RolesByUser;
 import com.trainibit.first_api.entity.User;
 import com.trainibit.first_api.mapper.UserMapper;
 import com.trainibit.first_api.repository.FederalStateRepository;
-import com.trainibit.first_api.repository.RoleRepository;
 import com.trainibit.first_api.repository.UserRepository;
-import com.trainibit.first_api.request.RoleUserRequest;
 import com.trainibit.first_api.request.UserRequestPost;
 import com.trainibit.first_api.request.UserRequestPut;
 import com.trainibit.first_api.response.UserResponse;
 import com.trainibit.first_api.response.external.PlanetResponse;
 import com.trainibit.first_api.service.PlanetService;
+import com.trainibit.first_api.service.RoleService;
 import com.trainibit.first_api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -31,13 +32,13 @@ public class UserServiceImpl implements UserService {
     private FederalStateRepository federalStateRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
     private UserMapper userMapper;
 
     @Autowired
     private PlanetService planetService;
+
+    @Autowired
+    private RoleService roleService;
 
     @Override
     public List<UserResponse> getAll() {
@@ -60,17 +61,24 @@ public class UserServiceImpl implements UserService {
         newUser.setPlanet(obtainRandomPlanetName());
         newUser.setFederalState(federalStateRepository.getFederalStateByUuid(userRequest.getFederalStateUuid()));
 
-        List<RolesByUser> roles = new ArrayList<>();
+        List<Role> rolesTemplate = roleService.getAllRoles(); // Roles generales de la base de datos
+        List<RolesByUser> roles = new ArrayList<>(); // Roles que tendrá el usuario
+        List<UUID> rolesUuidsList = userRequest.getRoles()
+                                               .stream()
+                                               .map(roleUser -> roleUser.getRoleUuid())
+                                               .collect(Collectors.toList()); // UUIDs de los roles pasados por JSON
 
-        for(RoleUserRequest role : userRequest.getRoles()){
-            RolesByUser roleByUserTemporary = new RolesByUser();
-            roleByUserTemporary.setUser(newUser);
-            roleByUserTemporary.setRole(roleRepository.getRoleByUuid(role.getRolUuid())); 
-            roleByUserTemporary.setCreatedDate(currentTimeStamp); 
-            roleByUserTemporary.setUpdatedDate(currentTimeStamp);
-            roleByUserTemporary.setUuid(UUID.randomUUID());
-            roles.add(roleByUserTemporary);
-        }
+        rolesTemplate.forEach(role -> {
+            RolesByUser rolesByUserTemporary = new RolesByUser();
+            rolesByUserTemporary.setUser(newUser);
+            rolesByUserTemporary.setRole(role);
+            rolesByUserTemporary.setCreatedDate(currentTimeStamp);
+            rolesByUserTemporary.setUpdatedDate(currentTimeStamp);
+            rolesByUserTemporary.setUuid(UUID.randomUUID());
+            rolesByUserTemporary.setActivated(rolesUuidsList.contains(role.getUuid()));
+
+            roles.add(rolesByUserTemporary);
+        });
 
         newUser.setRoles(roles);
 
@@ -88,10 +96,13 @@ public class UserServiceImpl implements UserService {
     public UserResponse updateUser(UUID uuid, UserRequestPut userRequest) {
         User existentUser = userRepository.findByUuid(uuid);
 
-        existentUser.setFirstName(userRequest.getFirstName() != null ? userRequest.getFirstName() : existentUser.getFirstName());
-        existentUser.setLastName(userRequest.getLastName() != null ? userRequest.getLastName() : existentUser.getLastName());
+        existentUser.setFirstName(
+                userRequest.getFirstName() != null ? userRequest.getFirstName() : existentUser.getFirstName());
+        existentUser.setLastName(
+                userRequest.getLastName() != null ? userRequest.getLastName() : existentUser.getLastName());
         existentUser.setEmail(userRequest.getEmail() != null ? userRequest.getEmail() : existentUser.getEmail());
-        existentUser.setBirthdate(userRequest.getBirthdate() != null ? userRequest.getBirthdate() : existentUser.getBirthdate());
+        existentUser.setBirthdate(
+                userRequest.getBirthdate() != null ? userRequest.getBirthdate() : existentUser.getBirthdate());
         existentUser.setPlanet(userRequest.getPlanet() != null ? userRequest.getPlanet() : existentUser.getPlanet());
 
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
@@ -100,7 +111,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.entityToResponse(userRepository.save(existentUser));
     }
 
-    private String obtainRandomPlanetName(){
+    private String obtainRandomPlanetName() {
         Random random = new Random();
         int randomNumber = random.nextInt(60) + 1;
         PlanetResponse randomPlanet = planetService.getPlanetById(randomNumber);
