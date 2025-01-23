@@ -5,6 +5,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class RoleUserRequest {
+public class RoleUserRequestPut {
     private UUID roleUuid;  
+    private Boolean activated;
 }

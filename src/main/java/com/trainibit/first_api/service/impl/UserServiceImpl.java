@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -64,9 +65,9 @@ public class UserServiceImpl implements UserService {
         List<Role> rolesTemplate = roleService.getAllRoles(); // Roles generales de la base de datos
         List<RolesByUser> roles = new ArrayList<>(); // Roles que tendrá el usuario
         List<UUID> rolesUuidsList = userRequest.getRoles()
-                                               .stream()
-                                               .map(roleUser -> roleUser.getRoleUuid())
-                                               .collect(Collectors.toList()); // UUIDs de los roles pasados por JSON
+                .stream()
+                .map(roleUser -> roleUser.getRoleUuid())
+                .collect(Collectors.toList()); // UUIDs de los roles pasados por JSON
 
         rolesTemplate.forEach(role -> {
             RolesByUser rolesByUserTemporary = new RolesByUser();
@@ -107,6 +108,20 @@ public class UserServiceImpl implements UserService {
 
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
         existentUser.setUpdatedDate(currentTimeStamp);
+
+        existentUser.setFederalState(
+                userRequest.getFederalStateUuid() != null
+                        ? federalStateRepository.getFederalStateByUuid(userRequest.getFederalStateUuid())
+                        : existentUser.getFederalState());
+
+        HashMap<UUID, Boolean> rolesUpdated = new HashMap<>();
+        userRequest.getRoles()
+                .forEach(roleUpdated -> rolesUpdated.put(roleUpdated.getRoleUuid(), roleUpdated.getActivated()));
+
+        existentUser.getRoles().forEach(roleByUserExistentUser -> roleByUserExistentUser.setActivated(
+                rolesUpdated.containsKey(roleByUserExistentUser.getRole().getUuid()) // ¿Se modificó el rol?
+                        ? rolesUpdated.get(roleByUserExistentUser.getRole().getUuid()) //Si sí, se obtiene el nuevo valor del HashMap
+                        : roleByUserExistentUser.getActivated())); // Sino, conserva el valor original
 
         return userMapper.entityToResponse(userRepository.save(existentUser));
     }

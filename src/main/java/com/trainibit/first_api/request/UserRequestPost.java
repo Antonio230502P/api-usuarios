@@ -13,9 +13,9 @@ public class UserRequestPost {
     private String email;
     private LocalDate birthdate;
     private UUID federalStateUuid;
-    private ArrayList<RoleUserRequest> roles;
+    private ArrayList<RoleUserRequestPost> roles;
 
-    public UserRequestPost(String firstName, String lastName, String email, LocalDate birthdate, UUID federalStateUuid, ArrayList<RoleUserRequest> roles) {
+    public UserRequestPost(String firstName, String lastName, String email, LocalDate birthdate, UUID federalStateUuid, ArrayList<RoleUserRequestPost> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
