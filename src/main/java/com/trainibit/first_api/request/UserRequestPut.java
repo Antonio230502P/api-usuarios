@@ -6,9 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.UUID;
 
 @Data
 public class UserRequestPut {
@@ -26,7 +24,7 @@ public class UserRequestPut {
     private String federalStateUuid;
     @Valid
     private ArrayList<RoleUserRequestPut> roles;
-
+    
     public UserRequestPut(String firstName, String lastName, String email, String birthdate, String planet, String federalStateUuid, ArrayList<RoleUserRequestPut> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
