@@ -7,13 +7,14 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "federal_states")
-public class FederalState {
+public class FederalState implements Serializable {
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
