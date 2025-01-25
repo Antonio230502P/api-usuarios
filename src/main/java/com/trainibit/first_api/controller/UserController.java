@@ -24,7 +24,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
     @Autowired
     private UserService userService;
 
@@ -40,17 +39,19 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequestPost userRequest) {
-        return new ResponseEntity<>(userService.createUser(userRequest), CREATED); //201 Creado
+        return new ResponseEntity<>(userService.createUser(userRequest), CREATED); // 201 Creado
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<UserResponse> deleteUser(@PathVariable UUID uuid){
-        return ResponseEntity.status(204).body(userService.deleteUser(uuid)); //204 Solicitud exitosa pero sin contenido que retornar
+    public ResponseEntity<UserResponse> deleteUser(@PathVariable UUID uuid) {
+        return ResponseEntity.status(204).body(userService.deleteUser(uuid)); // 204 Solicitud exitosa pero sin
+                                                                              // contenido que retornar
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable UUID uuid, @RequestBody UserRequestPut userRequest){
-        return ResponseEntity.ok(userService.updateUser(uuid, userRequest)); // Para la actualización de contenido puede retornarse un código 200 o un 400 sin retornar contenido
+    public ResponseEntity<UserResponse> updateUser(@PathVariable UUID uuid, @RequestBody UserRequestPut userRequest) {
+        return ResponseEntity.ok(userService.updateUser(uuid, userRequest)); // Para la actualización de contenido puede
+                                                                             // retornarse un código 200 o un 400 sin
+                                                                             // retornar contenido
     }
-
 }

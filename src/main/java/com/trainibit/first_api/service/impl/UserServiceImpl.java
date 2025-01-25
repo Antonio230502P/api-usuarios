@@ -55,10 +55,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse createUser(UserRequestPost userRequest) {
         User newUser = userMapper.requestToEntity(userRequest);
 
-        Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
         newUser.setUuid(UUID.randomUUID());
-        newUser.setCreatedDate(currentTimeStamp);
-        newUser.setUpdatedDate(currentTimeStamp);
         newUser.setPlanet(obtainRandomPlanetName());
         newUser.setFederalState(federalStateRepository.getFederalStateByUuid(UUID.fromString(userRequest.getFederalStateUuid())));
 

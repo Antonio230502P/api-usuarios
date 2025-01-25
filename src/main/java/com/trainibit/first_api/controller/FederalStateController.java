@@ -1,15 +1,14 @@
 package com.trainibit.first_api.controller;
 
-import com.trainibit.first_api.entity.FederalState;
+import com.trainibit.first_api.request.FederalStateRequest;
 import com.trainibit.first_api.request.UserRequestPost;
 import com.trainibit.first_api.request.UserRequestPut;
 import com.trainibit.first_api.response.FederalStateResponse;
 import com.trainibit.first_api.response.UserResponse;
 import com.trainibit.first_api.service.FederalStateService;
+import com.trainibit.first_api.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,37 +25,33 @@ import java.util.UUID;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
-@EnableCaching
 @RequestMapping("/federal-states")
 public class FederalStateController {
     @Autowired
     private FederalStateService federalStateService;
 
     @GetMapping
-    @Cacheable(value = "federalStates")
-
-    public List<FederalState> getAllFederalStates() {
-        return federalStateService.getAllFederalStates(); // 200
+    public ResponseEntity<List<FederalStateResponse>> getFederalStates() {
+        return ResponseEntity.ok(federalStateService.getAllFederalStates());
     }
 
     @GetMapping("/{uuid}")
-    @Cacheable(value = "federal-state", key = "#uuid")
-    public FederalState getByUuid(@PathVariable UUID uuid) {
-        return federalStateService.getFederalStateByUuid(uuid); // 200
+    public ResponseEntity<FederalStateResponse> getFederalState(@PathVariable UUID uuid) {
+        return ResponseEntity.ok(federalStateService.getFederalStateByUuid(uuid));
     }
 
     @PostMapping
-    public ResponseEntity<FederalStateResponse> createUser(@Valid @RequestBody FederalStateRequest federalStateRequest) {
-        return new ResponseEntity<>(federalStateService.createFederalState(userRequest), CREATED); //201 Creado
+    public ResponseEntity<FederalStateResponse> createFederalState(@Valid @RequestBody FederalStateRequest federalStateRequest) {
+        return new ResponseEntity<>(federalStateService.createFederalState(federalStateRequest), CREATED);
     }
 
-    @DeleteMapping("/{uuid}")
-    public ResponseEntity<UserResponse> deleteUser(@PathVariable UUID uuid){
-        return ResponseEntity.status(204).body(userService.deleteUser(uuid)); //204 Solicitud exitosa pero sin contenido que retornar
-    }
+    // @DeleteMapping("/{uuid}")
+    // public ResponseEntity<UserResponse> deleteUser(@PathVariable UUID uuid) {
+    //     return ResponseEntity.status(204).body(userService.deleteUser(uuid)); /
+    // }
 
-    @PutMapping("/{uuid}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable UUID uuid, @RequestBody UserRequestPut userRequest){
-        return ResponseEntity.ok(userService.updateUser(uuid, userRequest)); // Para la actualización de contenido puede retornarse un código 200 o un 400 sin retornar contenido
-    }
+    // @PutMapping("/{uuid}")
+    // public ResponseEntity<UserResponse> updateUser(@PathVariable UUID uuid, @RequestBody UserRequestPut userRequest) {
+    //     return ResponseEntity.ok(userService.updateUser(uuid, userRequest));
+    // }
 }

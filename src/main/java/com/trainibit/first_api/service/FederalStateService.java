@@ -1,16 +1,15 @@
 package com.trainibit.first_api.service;
 
-import com.trainibit.first_api.entity.FederalState;
-import com.trainibit.first_api.request.UserRequestPost;
+import com.trainibit.first_api.request.FederalStateRequest;
 import com.trainibit.first_api.request.UserRequestPut;
-import com.trainibit.first_api.response.UserResponse;
+import com.trainibit.first_api.response.FederalStateResponse;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface FederalStateService {
-    FederalState getFederalStateByUuid(UUID uuid);
-    List<FederalState> getAllFederalStates();
-    UserResponse createFederalState(UserRequestPost userRequestPost);
-    UserResponse updateFederalState(UUID uuid, UserRequestPut userRequestPost);
+    FederalStateResponse getFederalStateByUuid(UUID uuid);
+    List<FederalStateResponse> getAllFederalStates();
+    FederalStateResponse createFederalState(FederalStateRequest federalStateRequest);
+    FederalStateResponse updateFederalState(UUID uuid, UserRequestPut userRequestPost);
 }
