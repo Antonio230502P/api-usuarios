@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface FederalStateMapper {
     FederalStateResponse entityToResponse(FederalState federalState);
+
     List<FederalStateResponse> entityToResponseList(List<FederalState> federalStates);
+
     FederalState requestToEntity(FederalStateRequest federalStateRequest);
 }

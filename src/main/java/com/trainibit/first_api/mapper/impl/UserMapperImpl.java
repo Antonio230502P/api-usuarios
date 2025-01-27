@@ -32,7 +32,7 @@ public class UserMapperImpl implements UserMapper {
         userResponse.setUpdatedDate(user.getUpdatedDate());
         userResponse.setUuid(user.getUuid());
         userResponse.setFederalState(federalStateMapper.entityToResponse(user.getFederalState()));
-        userResponse.setRoles(rolesByUserMapper.entityToResponseList(user.getRoles()));
+        userResponse.setRoles(rolesByUserMapper.entityToResponseList(user.getRoles().stream().filter(role -> role.getActivated()).toList()));
 
         LocalDate birthdate = user.getBirthdate();
         LocalDate currentDate = LocalDate.now();

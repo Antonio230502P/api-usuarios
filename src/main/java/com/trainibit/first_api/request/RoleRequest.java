@@ -3,6 +3,6 @@ package com.trainibit.first_api.request;
 import lombok.Data;
 
 @Data
-public class FederalStateRequest {
+public class RoleRequest {
     private String name;
 }
