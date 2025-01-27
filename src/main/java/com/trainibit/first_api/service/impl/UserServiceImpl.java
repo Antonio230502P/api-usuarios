@@ -57,7 +57,8 @@ public class UserServiceImpl implements UserService {
 
         newUser.setUuid(UUID.randomUUID());
         newUser.setPlanet(obtainRandomPlanetName());
-        newUser.setFederalState(federalStateRepository.getFederalStateByUuid(UUID.fromString(userRequest.getFederalStateUuid())));
+        newUser.setFederalState(
+                federalStateRepository.getFederalStateByUuid(UUID.fromString(userRequest.getFederalStateUuid())));
 
         List<Role> rolesTemplate = roleService.getAllRoles(); // Roles generales de la base de datos
         List<RolesByUser> roles = new ArrayList<>(); // Roles que tendrá el usuario
@@ -98,7 +99,8 @@ public class UserServiceImpl implements UserService {
                 userRequest.getLastName() != null ? userRequest.getLastName() : existentUser.getLastName());
         existentUser.setEmail(userRequest.getEmail() != null ? userRequest.getEmail() : existentUser.getEmail());
         existentUser.setBirthdate(
-                userRequest.getBirthdate() != null ? LocalDate.parse(userRequest.getBirthdate()) : existentUser.getBirthdate());
+                userRequest.getBirthdate() != null ? LocalDate.parse(userRequest.getBirthdate())
+                        : existentUser.getBirthdate());
         existentUser.setPlanet(userRequest.getPlanet() != null ? userRequest.getPlanet() : existentUser.getPlanet());
 
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
@@ -106,16 +108,19 @@ public class UserServiceImpl implements UserService {
 
         existentUser.setFederalState(
                 userRequest.getFederalStateUuid() != null
-                        ? federalStateRepository.getFederalStateByUuid(UUID.fromString(userRequest.getFederalStateUuid()))
+                        ? federalStateRepository
+                                .getFederalStateByUuid(UUID.fromString(userRequest.getFederalStateUuid()))
                         : existentUser.getFederalState());
 
         HashMap<UUID, Boolean> rolesUpdated = new HashMap<>();
         userRequest.getRoles()
-                .forEach(roleUpdated -> rolesUpdated.put(UUID.fromString(roleUpdated.getRoleUuid()), roleUpdated.getActivated()));
+                .forEach(roleUpdated -> rolesUpdated.put(UUID.fromString(roleUpdated.getRoleUuid()),
+                        roleUpdated.getActivated()));
 
         existentUser.getRoles().forEach(roleByUserExistentUser -> roleByUserExistentUser.setActivated(
                 rolesUpdated.containsKey(roleByUserExistentUser.getRole().getUuid()) // ¿Se modificó el rol?
-                        ? rolesUpdated.get(roleByUserExistentUser.getRole().getUuid()) //Si sí, se obtiene el nuevo valor del HashMap
+                        ? rolesUpdated.get(roleByUserExistentUser.getRole().getUuid()) // Si sí, se obtiene el nuevo
+                                                                                       // valor del HashMap
                         : roleByUserExistentUser.getActivated())); // Sino, conserva el valor original
 
         return userMapper.entityToResponse(userRepository.save(existentUser));

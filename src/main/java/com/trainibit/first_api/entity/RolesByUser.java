@@ -11,7 +11,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -34,12 +35,12 @@ public class RolesByUser {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_date", insertable = false, updatable = false)
+    @CreationTimestamp
     private Timestamp createdDate;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updated_date", insertable = false)
+    @UpdateTimestamp
     private Timestamp updatedDate;
 
     @Column(name = "uuid", nullable = false)

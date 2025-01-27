@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Data
 @Entity(name = "users")
 public class User {
@@ -39,9 +42,11 @@ public class User {
     private LocalDate birthdate;
 
     @Column(name = "created_date", nullable = false)
+    @CreationTimestamp
     private Timestamp createdDate;
 
     @Column(name = "updated_date", nullable = false)
+    @UpdateTimestamp
     private Timestamp updatedDate;
 
     @Column(name = "uuid")

@@ -4,21 +4,12 @@ import com.trainibit.first_api.entity.FederalState;
 import com.trainibit.first_api.mapper.FederalStateMapper;
 import com.trainibit.first_api.repository.FederalStateRepository;
 import com.trainibit.first_api.request.FederalStateRequest;
-import com.trainibit.first_api.request.UserRequestPost;
-import com.trainibit.first_api.request.UserRequestPut;
 import com.trainibit.first_api.response.FederalStateResponse;
-import com.trainibit.first_api.response.UserResponse;
 import com.trainibit.first_api.service.FederalStateService;
 
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +23,7 @@ public class FederalStateServiceImpl implements FederalStateService {
     private FederalStateMapper federalStateMapper;
 
     @Override
-    //@Cacheable(value = "federal-state", key="#uuid")
+    // @Cacheable(value = "federal-state", key="#uuid")
     public FederalStateResponse getFederalStateByUuid(UUID uuid) {
         log.info("Obteniendo de la BD: Federal State getByUuid {}", uuid);
         return federalStateMapper.entityToResponse(federalStateRepository.getFederalStateByUuid(uuid));
@@ -53,7 +44,16 @@ public class FederalStateServiceImpl implements FederalStateService {
     }
 
     @Override
-    public FederalStateResponse updateFederalState(UUID uuid, UserRequestPut userRequestPost) {
-        return null;
+    public FederalStateResponse deleteFederalState(UUID uuid) {
+        FederalState federalState = federalStateRepository.getFederalStateByUuid(uuid);
+        federalStateRepository.delete(federalState);
+        return federalStateMapper.entityToResponse(federalState);
+    }
+
+    @Override
+    public FederalStateResponse updateFederalState(UUID uuid, FederalStateRequest federalStateRequest) {
+        FederalState currentFederalState = federalStateRepository.getFederalStateByUuid(uuid);
+        currentFederalState.setName(federalStateRequest.getName());
+        return federalStateMapper.entityToResponse(federalStateRepository.save(currentFederalState));
     }
 }

@@ -7,7 +7,6 @@ import com.trainibit.first_api.response.FederalStateResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -35,5 +34,5 @@ public class FederalStateMapperImpl implements FederalStateMapper {
         FederalState federalState = new FederalState();
         federalState.setName(federalStateRequest.getName());
         return federalState;
-    }    
+    }
 }

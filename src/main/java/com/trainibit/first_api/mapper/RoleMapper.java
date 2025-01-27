@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface RoleMapper {
     RoleResponse entityToResponse(Role role);
+
     List<RoleResponse> entityToResponseList(List<Role> roles);
 }

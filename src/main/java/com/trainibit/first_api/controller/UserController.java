@@ -51,7 +51,7 @@ public class UserController {
     @PutMapping("/{uuid}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable UUID uuid, @RequestBody UserRequestPut userRequest) {
         return ResponseEntity.ok(userService.updateUser(uuid, userRequest)); // Para la actualización de contenido puede
-                                                                             // retornarse un código 200 o un 400 sin
+                                                                             // retornarse un código 200 o un 204 sin
                                                                              // retornar contenido
     }
 }

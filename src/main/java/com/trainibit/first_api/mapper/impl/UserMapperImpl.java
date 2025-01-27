@@ -40,7 +40,8 @@ public class UserMapperImpl implements UserMapper {
         Period period = Period.between(birthdate, currentDate);
 
         userResponse.setBirthDate(birthdate);
-        userResponse.setAge(period.getYears() + " years, " + period.getMonths() + " months and " + period.getDays() + " days" );
+        userResponse.setAge(
+                period.getYears() + " years, " + period.getMonths() + " months and " + period.getDays() + " days");
 
         userResponse.setPlanet(user.getPlanet());
 

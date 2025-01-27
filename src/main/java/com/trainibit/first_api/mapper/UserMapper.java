@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface UserMapper {
     UserResponse entityToResponse(User user);
+
     List<UserResponse> entityToResponseList(List<User> userList);
+
     User requestToEntity(UserRequestPost userRequest);
 }

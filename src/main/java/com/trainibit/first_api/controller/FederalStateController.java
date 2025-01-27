@@ -1,12 +1,8 @@
 package com.trainibit.first_api.controller;
 
 import com.trainibit.first_api.request.FederalStateRequest;
-import com.trainibit.first_api.request.UserRequestPost;
-import com.trainibit.first_api.request.UserRequestPut;
 import com.trainibit.first_api.response.FederalStateResponse;
-import com.trainibit.first_api.response.UserResponse;
 import com.trainibit.first_api.service.FederalStateService;
-import com.trainibit.first_api.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,13 +41,13 @@ public class FederalStateController {
         return new ResponseEntity<>(federalStateService.createFederalState(federalStateRequest), CREATED);
     }
 
-    // @DeleteMapping("/{uuid}")
-    // public ResponseEntity<UserResponse> deleteUser(@PathVariable UUID uuid) {
-    //     return ResponseEntity.status(204).body(userService.deleteUser(uuid)); /
-    // }
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<FederalStateResponse> deleteFederalState(@PathVariable UUID uuid) {
+        return ResponseEntity.status(204).body(federalStateService.deleteFederalState(uuid));
+    }
 
-    // @PutMapping("/{uuid}")
-    // public ResponseEntity<UserResponse> updateUser(@PathVariable UUID uuid, @RequestBody UserRequestPut userRequest) {
-    //     return ResponseEntity.ok(userService.updateUser(uuid, userRequest));
-    // }
+    @PutMapping("/{uuid}")
+    public ResponseEntity<FederalStateResponse> updateUser(@PathVariable UUID uuid, @RequestBody FederalStateRequest federalStateRequest) {
+        return ResponseEntity.ok(federalStateService.updateFederalState(uuid, federalStateRequest));
+    }
 }
