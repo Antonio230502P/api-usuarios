@@ -3,10 +3,12 @@ spring:
     name: first_api
   cache:
     type: redis
-    host: localhost
-    port: 6379
     redis:
       time-to-live: 60000
+  data:
+    redis:
+      host: localhost
+      port: 6379
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://users.cdgwyyu2q3bz.us-east-2.rds.amazonaws.com:5432/users

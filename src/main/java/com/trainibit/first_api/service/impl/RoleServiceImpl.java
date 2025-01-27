@@ -7,6 +7,9 @@ import com.trainibit.first_api.request.RoleRequest;
 import com.trainibit.first_api.response.RoleResponse;
 import com.trainibit.first_api.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,11 +29,13 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Cacheable(value = "roles", key="'all'")
     public List<RoleResponse> getAllRoleResponses() {
         return roleMapper.entityToResponseList(roleRepository.findAll());
     }
 
     @Override
+    @Cacheable(value = "role", key="#uuid")
     public RoleResponse getByUuid(UUID uuid) {
         return roleMapper.entityToResponse(roleRepository.getRoleByUuid(uuid));
     }
@@ -43,6 +48,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "role", key = "#uuid", beforeInvocation = true)
     public RoleResponse deleteResponse(UUID uuid) {
         Role roleToDelete = roleRepository.getRoleByUuid(uuid);
         roleRepository.delete(roleToDelete);
@@ -50,6 +56,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @CachePut(cacheNames = "role", key="#uuid")
     public RoleResponse updateRole(UUID uuid, RoleRequest roleRequest) {
         Role existentRole = roleRepository.getRoleByUuid(uuid);
         existentRole.setName(roleRequest.getName());

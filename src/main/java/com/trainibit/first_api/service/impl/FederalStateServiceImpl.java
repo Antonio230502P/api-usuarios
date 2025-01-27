@@ -9,6 +9,9 @@ import com.trainibit.first_api.service.FederalStateService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
@@ -23,13 +26,14 @@ public class FederalStateServiceImpl implements FederalStateService {
     private FederalStateMapper federalStateMapper;
 
     @Override
-    // @Cacheable(value = "federal-state", key="#uuid")
+    @Cacheable(value = "federalState", key="#uuid")
     public FederalStateResponse getFederalStateByUuid(UUID uuid) {
         log.info("Obteniendo de la BD: Federal State getByUuid {}", uuid);
         return federalStateMapper.entityToResponse(federalStateRepository.getFederalStateByUuid(uuid));
     }
 
     @Override
+    @Cacheable(value = "federalStates", key = "'all'")
     public List<FederalStateResponse> getAllFederalStates() {
         log.info("Obteniendo todas las entidades federativas desde la base de datos");
         return federalStateMapper.entityToResponseList(federalStateRepository.findAll());
@@ -44,6 +48,7 @@ public class FederalStateServiceImpl implements FederalStateService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "federalState", key = "#uuid", beforeInvocation = true)
     public FederalStateResponse deleteFederalState(UUID uuid) {
         FederalState federalState = federalStateRepository.getFederalStateByUuid(uuid);
         federalStateRepository.delete(federalState);
@@ -51,6 +56,7 @@ public class FederalStateServiceImpl implements FederalStateService {
     }
 
     @Override
+    @CachePut(cacheNames = "federalState", key="#uuid")
     public FederalStateResponse updateFederalState(UUID uuid, FederalStateRequest federalStateRequest) {
         FederalState currentFederalState = federalStateRepository.getFederalStateByUuid(uuid);
         currentFederalState.setName(federalStateRequest.getName());
