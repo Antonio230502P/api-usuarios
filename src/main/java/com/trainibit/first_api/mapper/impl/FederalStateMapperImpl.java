@@ -4,11 +4,10 @@ import com.trainibit.first_api.entity.FederalState;
 import com.trainibit.first_api.mapper.FederalStateMapper;
 import com.trainibit.first_api.request.FederalStateRequest;
 import com.trainibit.first_api.response.FederalStateResponse;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.stereotype.Service;
 
 @Service
 public class FederalStateMapperImpl implements FederalStateMapper {

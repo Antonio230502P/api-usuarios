@@ -37,7 +37,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getByUuid(uuid)); // 200
     }
 
-    @PostMapping
+        @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequestPost userRequest) {
         return new ResponseEntity<>(userService.createUser(userRequest), CREATED); // 201 Creado
     }

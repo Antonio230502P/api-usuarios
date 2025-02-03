@@ -9,7 +9,9 @@ import com.trainibit.first_api.repository.UserRepository;
 import com.trainibit.first_api.request.UserRequestPost;
 import com.trainibit.first_api.request.UserRequestPut;
 import com.trainibit.first_api.response.UserResponse;
+import com.trainibit.first_api.response.UserResponseKafkca;
 import com.trainibit.first_api.response.external.PlanetResponse;
+import com.trainibit.first_api.service.KafkaProducerService;
 import com.trainibit.first_api.service.PlanetService;
 import com.trainibit.first_api.service.RoleService;
 import com.trainibit.first_api.service.UserService;
@@ -40,6 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private KafkaProducerService kafkaProducerService;
 
     @Override
     public List<UserResponse> getAll() {
@@ -78,8 +83,18 @@ public class UserServiceImpl implements UserService {
         });
 
         newUser.setRoles(roles);
+        newUser.setFirstToken(generateRandomToken());
 
-        return userMapper.entityToResponse(userRepository.save(newUser));
+        User savedUser = userRepository.save(newUser);
+
+        UserResponseKafkca userResponseKafkca = new UserResponseKafkca();
+        userResponseKafkca.setUuid(savedUser.getUuid());
+        userResponseKafkca.setEmail(savedUser.getEmail());
+        userResponseKafkca.setFirstToken(savedUser.getFirstToken());
+
+        kafkaProducerService.sendMessage(userResponseKafkca);
+
+        return userMapper.entityToResponse(savedUser);
     }
 
     @Override
@@ -131,5 +146,15 @@ public class UserServiceImpl implements UserService {
         int randomNumber = random.nextInt(60) + 1;
         PlanetResponse randomPlanet = planetService.getPlanetById(randomNumber);
         return randomPlanet.getResult().getProperties().getName();
+    }
+
+    private String generateRandomToken(){
+        Random rand = new Random();
+        String token = "";
+
+        for(int i = 1; i <= 6; i++)
+            token += rand.nextInt(10);
+
+        return token;
     }
 }

@@ -3,8 +3,6 @@ package com.trainibit.first_api.controller;
 import com.trainibit.first_api.request.FederalStateRequest;
 import com.trainibit.first_api.response.FederalStateResponse;
 import com.trainibit.first_api.service.FederalStateService;
-
-
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
