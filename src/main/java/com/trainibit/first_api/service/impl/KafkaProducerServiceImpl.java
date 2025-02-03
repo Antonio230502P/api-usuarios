@@ -1,7 +1,7 @@
 package com.trainibit.first_api.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.trainibit.first_api.response.UserResponseKafkca;
+import com.trainibit.first_api.response.UserResponseKafka;
 import com.trainibit.first_api.service.KafkaProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -20,16 +20,16 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void sendMessage(UserResponseKafkca userResponseKafkca) {
+    public void sendMessage(UserResponseKafka userResponseKafka) {
         try{
-            CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName, userResponseKafkca.getUuid().toString(), objectMapper.writeValueAsString(userResponseKafkca));
+            CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName, userResponseKafka.getUuid().toString(), objectMapper.writeValueAsString(userResponseKafka));
             future.whenComplete((result, ex) -> {
                 if (ex == null) {
-                    System.out.println("Sent message=[" + userResponseKafkca.getEmail() +
+                    System.out.println("Sent message=[" + userResponseKafka.getEmail() +
                             "] with offset=[" + result.getRecordMetadata().offset() + "]");
                 } else {
                     System.out.println("Unable to send message=[" +
-                            userResponseKafkca.getEmail() + "] due to : " + ex.getMessage());
+                            userResponseKafka.getEmail() + "] due to : " + ex.getMessage());
                 }
             });
         }catch (Exception e){

@@ -9,7 +9,7 @@ import com.trainibit.first_api.repository.UserRepository;
 import com.trainibit.first_api.request.UserRequestPost;
 import com.trainibit.first_api.request.UserRequestPut;
 import com.trainibit.first_api.response.UserResponse;
-import com.trainibit.first_api.response.UserResponseKafkca;
+import com.trainibit.first_api.response.UserResponseKafka;
 import com.trainibit.first_api.response.external.PlanetResponse;
 import com.trainibit.first_api.service.KafkaProducerService;
 import com.trainibit.first_api.service.PlanetService;
@@ -87,12 +87,12 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = userRepository.save(newUser);
 
-        UserResponseKafkca userResponseKafkca = new UserResponseKafkca();
-        userResponseKafkca.setUuid(savedUser.getUuid());
-        userResponseKafkca.setEmail(savedUser.getEmail());
-        userResponseKafkca.setFirstToken(savedUser.getFirstToken());
+        UserResponseKafka userResponseKafka = new UserResponseKafka();
+        userResponseKafka.setUuid(savedUser.getUuid());
+        userResponseKafka.setEmail(savedUser.getEmail());
+        userResponseKafka.setFirstToken(savedUser.getFirstToken());
 
-        kafkaProducerService.sendMessage(userResponseKafkca);
+        kafkaProducerService.sendMessage(userResponseKafka);
 
         return userMapper.entityToResponse(savedUser);
     }

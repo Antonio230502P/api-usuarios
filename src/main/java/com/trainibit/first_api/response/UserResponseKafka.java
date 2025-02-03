@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 @Data
-public class UserResponseKafkca implements Serializable {
+public class UserResponseKafka implements Serializable {
     private UUID uuid;
     private String email;
     private String firstToken;
