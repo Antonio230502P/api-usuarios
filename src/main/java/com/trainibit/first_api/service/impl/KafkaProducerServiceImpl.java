@@ -15,7 +15,7 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    private final String topicName = "user_registered";
+    private final String topicName = "users_registered";
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
