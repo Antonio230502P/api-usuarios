@@ -15,7 +15,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/users
     username: postgres
-    password: trainibit
+    password: SoloPostgres1
   jpa:
     hibernate:
       ddl-auto: validate

@@ -1,7 +1,7 @@
 package com.trainibit.first_api.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.trainibit.first_api.response.UserResponseKafka;
+import com.trainibit.first_api.request.UserRequestKafka;
 import com.trainibit.first_api.service.KafkaProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -20,7 +20,7 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void sendMessage(UserResponseKafka userResponseKafka) {
+    public void sendMessage(UserRequestKafka userResponseKafka) {
         try{
             CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName, userResponseKafka.getUuid().toString(), objectMapper.writeValueAsString(userResponseKafka));
             future.whenComplete((result, ex) -> {

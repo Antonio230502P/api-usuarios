@@ -6,10 +6,10 @@ import com.trainibit.first_api.entity.User;
 import com.trainibit.first_api.mapper.UserMapper;
 import com.trainibit.first_api.repository.FederalStateRepository;
 import com.trainibit.first_api.repository.UserRepository;
+import com.trainibit.first_api.request.UserRequestKafka;
 import com.trainibit.first_api.request.UserRequestPost;
 import com.trainibit.first_api.request.UserRequestPut;
 import com.trainibit.first_api.response.UserResponse;
-import com.trainibit.first_api.response.UserResponseKafka;
 import com.trainibit.first_api.response.external.PlanetResponse;
 import com.trainibit.first_api.service.KafkaProducerService;
 import com.trainibit.first_api.service.PlanetService;
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = userRepository.save(newUser);
 
-        UserResponseKafka userResponseKafka = new UserResponseKafka();
+        UserRequestKafka userResponseKafka = new UserRequestKafka();
         userResponseKafka.setUuid(savedUser.getUuid());
         userResponseKafka.setEmail(savedUser.getEmail());
         userResponseKafka.setFirstToken(savedUser.getFirstToken());
